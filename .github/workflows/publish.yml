@@ -44,8 +44,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "extendible-exec-${{ github.ref_name }}.sublime-package"
-          asset_name: "extendible-exec-${{ github.ref_name }}.sublime-package"
+          asset_path: "extendible-exec.sublime-package"
+          asset_name: "extendible-exec.sublime-package"
           asset_content_type: "application/zip"
       - name: Publish Release
         uses: eregon/publish-release@v1
