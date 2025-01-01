@@ -1,0 +1,53 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+    tags:
+      - 'v*'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "${{ github.ref }}"
+          release_name: "${{ github.ref }}"
+          draft: true
+          prerelease: false
+      - name: Install prerequisites 
+        run: |
+          sudo apt-get update
+          sudo apt-get install 7zip
+      - uses: actions/checkout@v3
+      - name: Package plugin
+        run: |
+          7z a "extendible-exec-${{ github.ref_name }}.sublime-package" -tzip *
+      - name: Upload packaged plugin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "extendible-exec-${{ github.ref_name }}.sublime-package"
+          asset_name: "extendible-exec-${{ github.ref_name }}.sublime-package"
+          asset_content_type: "application/zip"
+      - name: Publish Release
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
+        
