@@ -37,15 +37,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: Package plugin
         run: |
-          7z a "extendible-exec-${{ github.ref_name }}.sublime-package" -tzip * .python-version
+          7z a "extendible_exec.sublime-package" -tzip * .python-version
       - name: Upload packaged plugin
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "extendible-exec.sublime-package"
-          asset_name: "extendible-exec.sublime-package"
+          asset_path: "extendible_exec.sublime-package"
+          asset_name: "extendible_exec.sublime-package"
           asset_content_type: "application/zip"
       - name: Publish Release
         uses: eregon/publish-release@v1
