@@ -20,6 +20,7 @@ from .lib.environment import (
 )
 from .lib.yaml_config import (
     Build,
+    ExecppYamlBuild,
     load_resource,
 )
 from .execpp import (
