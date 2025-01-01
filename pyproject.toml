@@ -1,0 +1,28 @@
+[project]
+name = "extendible-exec"
+version = "0.0.1"
+requires-python = ">= 3.8"
+description = """
+    Very simple, and incomplete, extension of Sublime Text's built-in build system.
+"""
+readme = {file = "README", content-type = "text/markdown"}
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    '.'
+]
+testpaths = [
+    'tests/'
+]
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.mypy]
+strict = true
+exclude = [
+]

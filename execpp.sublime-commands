@@ -1,0 +1,4 @@
+[
+    { "caption": "extendible-exec: Cancel build", "command": "execpp", "args": {"kill": true} },
+    { "caption": "extendible-exec: List execpp files", "command": "list_execpp_builds" },
+]

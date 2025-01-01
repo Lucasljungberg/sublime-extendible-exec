@@ -1,0 +1,8 @@
+%YAML 1.2
+---
+name: Extendible exec
+version: 2
+file_extensions:
+  - execpp-build
+scope: execpp.source
+extends: Packages/YAML/YAML.sublime-syntax
