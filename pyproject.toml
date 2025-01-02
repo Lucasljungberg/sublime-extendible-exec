@@ -1,6 +1,5 @@
 [project]
 name = "extendible-exec"
-version = "0.0.1"
 requires-python = ">= 3.8"
 description = """
     Very simple, and incomplete, extension of Sublime Text's built-in build system.
