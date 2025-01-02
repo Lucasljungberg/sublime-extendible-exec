@@ -9,7 +9,8 @@ from typing import (
 def expand_variable(environment_variable_value: str, env: Dict[str, str]) -> str:
     defaulted_mapping: Dict[str, str] = collections.defaultdict(str)
     defaulted_mapping.update(env)
-    return string.Template(environment_variable_value).substitute(env)
+    templated_string = string.Template(environment_variable_value)
+    return templated_string.substitute(env) if templated_string.is_valid() else environment_variable_value
 
 
 def merge_and_substitute_environment_variables(

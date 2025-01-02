@@ -25,3 +25,15 @@ def test_merging_environment_precedence() -> None:
     assert "stays" == result["important_key"]
     assert "stays" == result["other_key"]
     assert "stays" == result["user_key"]
+
+
+def test_environment_substitution_that_contains_bad_formatting() -> None:
+    """A common case for this is PS1 containing weird formats, commonly: ${debian_chroot:+($debian_chroot)}
+
+    This test only fails if the substitution fails.
+    """
+    env = {
+        "PS1": "${debian_chroot:+($debian_chroot)}"
+    }
+    result = merge_and_substitute_environment_variables(env)
+    assert "PS1" in result
