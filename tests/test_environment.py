@@ -2,6 +2,7 @@ from getpass import getuser
 
 from lib.environment import merge_and_substitute_environment_variables
 
+
 def test_environment_variables_in_dict_expands() -> None:
     env = {"greeting": "Hello ${USER}"}
     result = merge_and_substitute_environment_variables(env)

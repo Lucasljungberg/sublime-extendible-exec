@@ -62,7 +62,6 @@ class ProcessListener:
         pass
 
 
-
 class AsyncProcess:
     def __init__(
         self,
@@ -75,7 +74,7 @@ class AsyncProcess:
         self.start_time = Timestamp.now()
         self.killed = False
 
-        self.process = subprocess.Popen(
+        self.process = subprocess.Popen(  # pylint: disable=consider-using-with
             cmd,
             bufsize=0,
             stdout=subprocess.PIPE,
@@ -84,7 +83,7 @@ class AsyncProcess:
             env=process_environment,
             cwd=cwd,
             shell=False,
-            preexec_fn=os.setsid,  # Assigns a process group? Either way, it's required for os.killpg.
+            start_new_session=True,
         )
 
         self.stdout_thread = threading.Thread(target=self.read_output)

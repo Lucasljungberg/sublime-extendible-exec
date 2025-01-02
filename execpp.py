@@ -165,7 +165,9 @@ class ExecppCommand(sublime_plugin.WindowCommand):
             self.output_view = self._output_view_form(output_view)
         self.output_view.show()
 
-        self.output_view.append(f"[execpp Starting {datetime.datetime.now(tz=datetime.timezone.utc).isoformat()}]\n")
+        self.output_view.append(
+            f"[execpp Starting {datetime.datetime.now(tz=datetime.timezone.utc).isoformat()}]\n"
+        )
         self.build_process = AsyncProcess(
             process_command,
             process_environment,

@@ -1,14 +1,13 @@
 import asyncio
-from dataclasses import dataclass
 from pathlib import Path
 from typing import (
     List,
     Optional,
 )
 
-from lib import process
-
 import pytest
+
+from lib import process
 
 
 class FakeListener(process.ProcessListener):
@@ -17,7 +16,7 @@ class FakeListener(process.ProcessListener):
         self.process_info: Optional[process.CompletedProcessInfo] = None
 
     def text(self) -> str:
-        return '\n'.join(self.lines).strip()
+        return "\n".join(self.lines).strip()
 
     def on_data(self, text: str) -> None:
         self.lines.append(text)

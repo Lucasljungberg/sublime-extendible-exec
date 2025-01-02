@@ -1,12 +1,17 @@
 from collections import ChainMap
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import (
-    Callable,
     Dict,
     List,
-    Optional,
 )
+
+try:
+    import yaml
+except ImportError as error:
+    raise ImportError(
+        "Unable to load .execpp-build file. Found no yaml parser to import."
+    ) from error
 
 
 @dataclass(frozen=True)
@@ -30,7 +35,10 @@ class Build:
         return [build.name() for build in self.variants()]
 
     def variants(self) -> List["Build"]:
-        return [self] + [Build(ChainMap(variant, {"variant": []}, self.loaded_config)) for variant in self.loaded_config.get("variants", [])]
+        return [self] + [
+            Build(ChainMap(variant, {"variant": []}, self.loaded_config))
+            for variant in self.loaded_config.get("variants", [])
+        ]
 
     def _find_variant(self, name: str) -> "Build":
         if name == self.name():
@@ -57,9 +65,4 @@ class Build:
 
 
 def load_resource(yaml_content: str):
-    try:
-        import yaml
-    except ImportError:
-        sublime.error_dialog("Unable to load .execpp-build file. Found no yaml parser to import.")
-
     return yaml.safe_load(yaml_content)

@@ -26,3 +26,15 @@ asyncio_default_fixture_loop_scope = "function"
 strict = true
 exclude = [
 ]
+
+[tool.pylint]
+ignore = [
+    "execpp.py",
+    "execpp_yaml.py",
+]
+disable = [
+    "missing-function-docstring",
+    "missing-class-docstring",
+    "missing-module-docstring",
+]
+max-line-length = 120

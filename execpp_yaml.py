@@ -1,4 +1,5 @@
 import os
+from dataclasses import asdict
 from pathlib import Path
 from typing import (
     Callable,
@@ -108,7 +109,12 @@ class RunLastExecppBuildCommand(sublime_plugin.WindowCommand):
     def _on_build_select(self, selected_build: Build) -> None:
         self.saved_build_config = selected_build
         self.last_build_name = selected_build.name()
-        log("Running command", self.saved_build_config.config_for(self.last_build_name), "with name", self.last_build_name)
+        log(
+            "Running command",
+            self.saved_build_config.config_for(self.last_build_name),
+            "with name",
+            self.last_build_name,
+        )
         self.window.run_command(
             "execpp",
             args=asdict(self.saved_build_config.config_for(self.last_build_name)),
@@ -129,7 +135,12 @@ class RunLastExecppBuildCommand(sublime_plugin.WindowCommand):
         ):
             self._select_build_if_missing()
         else:
-            log("Running command", self.saved_build_config.config_for(self.last_build_name), "with name", self.last_build_name)
+            log(
+                "Running command",
+                self.saved_build_config.config_for(self.last_build_name),
+                "with name",
+                self.last_build_name,
+            )
             self.window.run_command(
                 "execpp",
                 args=asdict(self.saved_build_config.config_for(self.last_build_name)),
