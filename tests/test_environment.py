@@ -32,8 +32,6 @@ def test_environment_substitution_that_contains_bad_formatting() -> None:
 
     This test only fails if the substitution fails.
     """
-    env = {
-        "PS1": "${debian_chroot:+($debian_chroot)}"
-    }
+    env = {"PS1": "${debian_chroot:+($debian_chroot)}"}
     result = merge_and_substitute_environment_variables(env)
     assert "PS1" in result

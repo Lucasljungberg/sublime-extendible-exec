@@ -6,11 +6,20 @@ from typing import (
 )
 
 
+def _safe_template_substitute(
+    templated_string: string.Template, original_string: str, env: Dict[str, str]
+) -> bool:
+    try:
+        return templated_string.substitute(env)
+    except ValueError:
+        return original_string
+
+
 def expand_variable(environment_variable_value: str, env: Dict[str, str]) -> str:
     defaulted_mapping: Dict[str, str] = collections.defaultdict(str)
     defaulted_mapping.update(env)
     templated_string = string.Template(environment_variable_value)
-    return templated_string.substitute(env) if templated_string.is_valid() else environment_variable_value
+    return _safe_template_substitute(templated_string, environment_variable_value, env)
 
 
 def merge_and_substitute_environment_variables(
