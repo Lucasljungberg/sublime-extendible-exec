@@ -3,19 +3,20 @@ import os
 import string
 from typing import (
     Dict,
+    Mapping,
 )
 
 
 def _safe_template_substitute(
-    templated_string: string.Template, original_string: str, env: Dict[str, str]
-) -> bool:
+    templated_string: string.Template, original_string: str, env: Mapping[str, str]
+) -> str:
     try:
         return templated_string.substitute(env)
     except ValueError:
         return original_string
 
 
-def expand_variable(environment_variable_value: str, env: Dict[str, str]) -> str:
+def expand_variable(environment_variable_value: str, env: Mapping[str, str]) -> str:
     defaulted_mapping: Dict[str, str] = collections.defaultdict(str)
     defaulted_mapping.update(env)
     templated_string = string.Template(environment_variable_value)

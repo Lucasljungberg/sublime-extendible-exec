@@ -2,8 +2,10 @@ from collections import ChainMap
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import (
+    Any,
     Dict,
     List,
+    MutableMapping,
 )
 
 try:
@@ -16,9 +18,9 @@ except ImportError as error:
 
 @dataclass(frozen=True)
 class ExecppYamlBuild:
-    command: List[str] = field(default=list)
-    env: Dict[str, str] = field(default=dict)
-    variables: Dict[str, str] = field(default=dict)
+    command: List[str] = field(default_factory=list)
+    env: Dict[str, str] = field(default_factory=dict)
+    variables: Dict[str, str] = field(default_factory=dict)
     working_dir: str = str(Path.cwd())
     output_view: str = "panel"
     scope: str = ""
@@ -26,11 +28,16 @@ class ExecppYamlBuild:
 
 
 class Build:
-    def __init__(self, loaded_config) -> None:
+    def __init__(self, loaded_config: MutableMapping[str, Any]) -> None:
         self.loaded_config = loaded_config
 
     def name(self) -> str:
-        return self.loaded_config.get("name")
+        if "name" not in self.loaded_config:
+            raise KeyError("Build does not contain a name.")
+
+        # This default value is only to convince Mypy it's a string until
+        # self.loaded config has defined types.
+        return self.loaded_config.get("name", "")
 
     def names(self) -> List[str]:
         return [build.name() for build in self.variants()]
@@ -69,5 +76,6 @@ class Build:
         return self.loaded_config.get("scope", "")
 
 
-def load_resource(yaml_content: str):
-    return yaml.safe_load(yaml_content)
+def load_resource(yaml_content: str) -> MutableMapping[str, Any]:
+    # Ignore this until the value in the file can be assigned types.
+    return yaml.safe_load(yaml_content)  # type: ignore
