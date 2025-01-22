@@ -76,7 +76,7 @@ def find_and_load_configuration_files(window: sublime.Window) -> List[Build]:
 
 def on_build_select_with_choices(
     window: sublime.Window,
-    choices: List[ExecppYamlBuild],
+    choices: List[Build],
     on_select: Callable[[Build], None] = _no_action,
 ) -> Callable[[int], Build]:
     def choice_function(index: int) -> Build:
@@ -94,9 +94,23 @@ def display_and_select_build(
     build_variants: List[Build],
     on_select: Callable[[Build], None] = _no_action,
 ) -> None:
-    on_select_action = on_build_select_with_choices(window, build_variants, on_select)
+    active_view_scopes = " ".join(
+        window.active_view().scope_name(cursor.begin())
+        for cursor in window.active_view().sel()
+    )
+
+    builds_matching_scope_selector = [
+        build
+        for build in build_variants
+        if sublime.score_selector(active_view_scopes, build.scope()) > 0
+    ]
+
+    on_select_action = on_build_select_with_choices(
+        window, builds_matching_scope_selector, on_select
+    )
     window.show_quick_panel(
-        [variant.name() for variant in build_variants], on_select=on_select_action
+        [variant.name() for variant in builds_matching_scope_selector],
+        on_select=on_select_action,
     )
 
 

@@ -127,6 +127,7 @@ class ExecppCommand(sublime_plugin.WindowCommand):
         working_dir: str = str(Path.cwd()),
         output_view: str = "panel",
         kill: bool = False,
+        scope: str = "",
     ) -> None:
         if kill and self.build_process and self.build_process.is_active():
             log("[execpp] Killing active process.")
@@ -140,6 +141,16 @@ class ExecppCommand(sublime_plugin.WindowCommand):
 
         if not command:
             raise ValueError("Empty command given")
+
+        if not any(
+            self.window.active_view().match_selector(cursor.begin(), scope)
+            for cursor in self.window.active_view().sel()
+        ):
+            log(
+                "[execpp] Current scope does not match the job's scope configuration",
+                scope,
+            )
+            return
 
         system_environment = os.environ.copy()
         settings_environment = (

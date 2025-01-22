@@ -21,6 +21,7 @@ class ExecppYamlBuild:
     variables: Dict[str, str] = field(default=dict)
     working_dir: str = str(Path.cwd())
     output_view: str = "panel"
+    scope: str = ""
     kill: bool = False
 
 
@@ -60,8 +61,12 @@ class Build:
             variables=build.loaded_config.get("variables", {}),
             working_dir=build.loaded_config.get("working_dir", str(Path.cwd())),
             output_view=build.loaded_config.get("output_view", "panel"),
+            scope=build.loaded_config.get("scope", ""),
             kill=build.loaded_config.get("kill", False),
         )
+
+    def scope(self) -> str:
+        return self.loaded_config.get("scope", "")
 
 
 def load_resource(yaml_content: str):
